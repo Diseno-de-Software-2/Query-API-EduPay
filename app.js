@@ -78,10 +78,10 @@ app.get('/comunicaciones', async (req, res) => {
     })
 })
 
-// Get all servicios of a sede from the database
-app.get('/servicios-:idSede', async (req, res) => {
-    const { idSede } = req.params
-    const query = `SELECT * FROM servicios WHERE id_sede = ${idSede}`
+// Get all servicios of a specific oficina from the database
+app.get('/services-:idSede-:nombreOficina', async (req, res) => {
+    const { idSede, nombreOficina } = req.params
+    const query = `SELECT * FROM servicios WHERE id_sede = ${idSede} AND nombre_oficina = '${nombreOficina}'`
     connection.query(query, (error, results) => {
         if (error) throw error
         if (results.length > 0) {
@@ -92,10 +92,10 @@ app.get('/servicios-:idSede', async (req, res) => {
     })
 })
 
-// Get all servicios of a specific oficina from the database
-app.get('/servicios-:idSede-:nombreOficina', async (req, res) => {
-    const { idSede, nombreOficina } = req.params
-    const query = `SELECT * FROM servicios WHERE id_sede = ${idSede} AND nombre_oficina = '${nombreOficina}'`
+// Get all servicios of a sede from the database
+app.get('/servicios-:idSede', async (req, res) => {
+    const { idSede } = req.params
+    const query = `SELECT * FROM servicios WHERE id_sede = ${idSede}`
     connection.query(query, (error, results) => {
         if (error) throw error
         if (results.length > 0) {
