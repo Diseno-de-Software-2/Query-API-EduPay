@@ -92,6 +92,20 @@ app.get('/servicios-:idSede', async (req, res) => {
     })
 })
 
+// Get all servicios of a specific oficina from the database
+app.get('/servicios-:idSede-:nombreOficina', async (req, res) => {
+    const { idSede, nombreOficina } = req.params
+    const query = `SELECT * FROM servicios WHERE id_sede = ${idSede} AND nombre_oficina = '${nombreOficina}'`
+    connection.query(query, (error, results) => {
+        if (error) throw error
+        if (results.length > 0) {
+            res.json(results)
+        } else {
+            res.send('Empty result')
+        }
+    })
+})
+
 // Get all oficinas of a sede from the database
 app.get('/oficinas-:idSede', async (req, res) => {
     const { idSede } = req.params
