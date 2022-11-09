@@ -149,6 +149,48 @@ app.get('/trabaja-en', async (req, res) => {
     })
 })
 
+// Get all the historal of a persona from the database
+app.get('/historial-:idPersona', async (req, res) => {
+    const { idPersona } = req.params
+    const query = `SELECT * FROM historial WHERE id_persona = ${idPersona}`
+    connection.query(query, (error, results) => {
+        if (error) throw error
+        if (results.length > 0) {
+            res.json(results)
+        } else {
+            res.send('Empty result')
+        }
+    })
+})
+
+// Get all tarjetas of a persona from the database
+app.get('/tarjetas-:idPersona', async (req, res) => {
+    const { idPersona } = req.params
+    const query = `SELECT * FROM tarjetas WHERE id_persona = ${idPersona}`
+    connection.query(query, (error, results) => {
+        if (error) throw error
+        if (results.length > 0) {
+            res.json(results)
+        } else {
+            res.send('Empty result')
+        }
+    })
+})
+
+// Get all cuentas of a persona from the database
+app.get('/cuentas-:idPersona', async (req, res) => {
+    const { idPersona } = req.params
+    const query = `SELECT * FROM cuentas WHERE id_persona = ${idPersona}`
+    connection.query(query, (error, results) => {
+        if (error) throw error
+        if (results.length > 0) {
+            res.json(results)
+        } else {
+            res.send('Empty result')
+        }
+    })
+})
+
 // Register or connect service in the API Gateway service
 app.listen(PORT, async () => {
     const response = await axios({
