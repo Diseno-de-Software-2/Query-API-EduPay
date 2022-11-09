@@ -67,23 +67,11 @@ app.get('/oficinas', async (req, res) => {
     })
 })
 
-// Get all comunicaciones from the database
-app.get('/comunicaciones', async (req, res) => {
-    const query = 'SELECT * FROM comunicaciones'
-    connection.query(query, (error, results) => {
-        if (error) throw error
-        if (results.length > 0) {
-            res.json(results)
-        } else {
-            res.send('Empty result')
-        }
-    })
-})
 
 // Get all servicios of a specific oficina from the database
 app.get('/services-:idSede-:nombreOficina', async (req, res) => {
     const { idSede, nombreOficina } = req.params
-    const query = `SELECT * FROM servicios WHERE id_sede = ${idSede} AND nombre_oficina = '${nombreOficina}'`
+    const query = `SELECT servicios.id, servicios.nombre, servicios.valor, servicios.descripcion FROM servicios INNER JOIN oficinas ON servicios.id_oficina = oficinas.id WHERE oficinas.id_sede = ${idSede} AND oficinas.nombre = '${nombreOficina}'`
     connection.query(query, (error, results) => {
         if (error) throw error
         if (results.length > 0) {
@@ -97,7 +85,7 @@ app.get('/services-:idSede-:nombreOficina', async (req, res) => {
 // Get all servicios of a sede from the database
 app.get('/servicios-:idSede', async (req, res) => {
     const { idSede } = req.params
-    const query = `SELECT * FROM servicios WHERE id_sede = ${idSede}`
+    const query = `SELECT servicios.id, servicios.nombre, servicios.valor, servicios.descripcion FROM servicios INNER JOIN oficinas ON servicios.id_oficina = oficinas.id WHERE oficinas.id_sede = ${idSede}`
     connection.query(query, (error, results) => {
         if (error) throw error
         if (results.length > 0) {
@@ -112,33 +100,6 @@ app.get('/servicios-:idSede', async (req, res) => {
 app.get('/oficinas-:idSede', async (req, res) => {
     const { idSede } = req.params
     const query = `SELECT * FROM oficinas WHERE id_sede = ${idSede}`
-    connection.query(query, (error, results) => {
-        if (error) throw error
-        if (results.length > 0) {
-            res.json(results)
-        } else {
-            res.send('Empty result')
-        }
-    })
-})
-
-// Get all ordenes of a persona from the database 
-app.get('/ordenes-:idPersona', async (req, res) => {
-    const { idPersona } = req.params
-    const query = `SELECT * FROM ordenes WHERE id_persona = ${idPersona}`
-    connection.query(query, (error, results) => {
-        if (error) throw error
-        if (results.length > 0) {
-            res.json(results)
-        } else {
-            res.send('Empty result')
-        }
-    })
-})
-
-// Get all relaciones de trabajo from the database
-app.get('/trabaja-en', async (req, res) => {
-    const query = 'SELECT * FROM trabaja'
     connection.query(query, (error, results) => {
         if (error) throw error
         if (results.length > 0) {
