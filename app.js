@@ -6,8 +6,11 @@ const HOST = 'localhost' // Change to actual host
 const cors = require('cors')
 const morgan = require('morgan')
 var setTerminalTitle = require('set-terminal-title');
+var portfinder = require('portfinder');
+portfinder.setBasePort(3100);
+portfinder.setHighestPort(3149);
 setTerminalTitle('Query service', { verbose: true });
-const PORT = 3100 || process.env.PORT
+var PORT;
 const DB_NAME = 'sistemainstitucional'
 const DB_USER = 'root'  // Change to your DB user
 const DB_PASSWORD = 'root' // Change to your DB password
@@ -155,22 +158,27 @@ app.get('/cuentas-:idPersona', async (req, res) => {
 })
 
 // Register or connect service in the API Gateway service
-app.listen(PORT, async () => {
-    const response = await axios({
-        method: 'post',
-        url: `http://localhost:3000/register`,
-        headers: { 'Content-Type': 'application/json' },
-        data: {
-            apiName: "query",
-            protocol: "http",
-            host: HOST,
-            port: PORT,
-        }
+portfinder.getPort(function (err, port) {
+    PORT = port;
+    app.listen(PORT, async () => {
+        const response = await axios({
+            method: 'post',
+            url: `http://localhost:3000/register`,
+            headers: { 'Content-Type': 'application/json' },
+            data: {
+                apiName: "query",
+                protocol: "http",
+                host: HOST,
+                port: PORT,
+            }
+        })
+        await axios.post('http://localhost:3000/switch/query', {
+            "url": "http://localhost:" + PORT,
+            "enabled": true
+        })
+        console.log(response.data)
+        console.log(`Query server listening on port ${PORT}`)
     })
-    await axios.post('http://localhost:3000/switch/query', {
-        "url": "http://localhost:" + PORT,
-        "enabled": true
-    })
-    console.log(response.data)
-    console.log(`Query server listening on port ${PORT}`)
-}) 
+});
+
+
