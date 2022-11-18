@@ -1,4 +1,5 @@
 const express = require('express')
+const credentials = require('../db_credentials');
 const app = express()
 const axios = require('axios')
 const mysql = require('mysql2')
@@ -12,8 +13,8 @@ portfinder.setHighestPort(3149);
 setTerminalTitle('Query service', { verbose: true });
 var PORT;
 const DB_NAME = 'sistemainstitucional'
-const DB_USER = 'root'  // Change to your DB user
-const DB_PASSWORD = 'root' // Change to your DB password
+const DB_USER = credentials['DB_USER']
+const DB_PASSWORD = credentials['DB_PASSWORD']
 
 app.use(express.json())
 app.use(cors())
