@@ -77,7 +77,7 @@ app.get('/oficinas', async (req, res) => {
 // Get all servicios of a specific oficina from the database
 app.get('/services-:idSede-:nombreOficina', async (req, res) => {
     const { idSede, nombreOficina } = req.params
-    const query = `SELECT servicios.id, servicios.nombre, servicios.valor, servicios.descripcion FROM servicios INNER JOIN oficinas ON servicios.id_oficina = oficinas.id WHERE oficinas.id_sede = ${idSede} AND oficinas.nombre = '${nombreOficina}'`
+    const query = `SELECT servicios.id, servicios.nombre, servicios.valor, servicios.descripcion, oficinas.id_sede, servicios.id_oficina, oficinas.nombre as oficina FROM servicios INNER JOIN oficinas ON servicios.id_oficina = oficinas.id WHERE oficinas.id_sede = ${idSede} AND oficinas.nombre = '${nombreOficina}'`
     connection.query(query, (error, results) => {
         if (error) throw error
         if (results.length > 0) {
@@ -91,7 +91,7 @@ app.get('/services-:idSede-:nombreOficina', async (req, res) => {
 // Get all servicios of a sede from the database
 app.get('/servicios-:idSede', async (req, res) => {
     const { idSede } = req.params
-    const query = `SELECT servicios.id, servicios.nombre, servicios.valor, servicios.descripcion, oficinas.id_sede, servicios.id_oficina, oficinas.nombre  FROM servicios INNER JOIN oficinas ON servicios.id_oficina = oficinas.id WHERE oficinas.id_sede = ${idSede}`
+    const query = `SELECT servicios.id, servicios.nombre, servicios.valor, servicios.descripcion, oficinas.id_sede, servicios.id_oficina, oficinas.nombre as oficina FROM servicios INNER JOIN oficinas ON servicios.id_oficina = oficinas.id WHERE oficinas.id_sede = ${idSede}`
     connection.query(query, (error, results) => {
         if (error) throw error
         if (results.length > 0) {
